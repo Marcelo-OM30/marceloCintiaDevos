@@ -1,19 +1,21 @@
 {
   "expo": {
-    "name": "devos_app",
-    "slug": "devos_app",
+    "name": "MarceloCintia Devos",
+    "slug": "marceloCintiaDevos",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "scheme": "devos",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.marcelocintia.devos"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,10 +23,32 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "package": "com.marcelocintia.devos"
     },
     "web": {
+      "bundler": "metro",
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Permite acesso às suas fotos para criar cards devocionais."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Permite salvar cards devocionais na sua galeria.",
+          "savePhotosPermission": "Permite salvar imagens na galeria."
+        }
+      ],
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
     }
   }
 }
