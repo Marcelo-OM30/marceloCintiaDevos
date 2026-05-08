@@ -157,6 +157,28 @@ export function useUpdateDevotional() {
   });
 }
 
+// ── Feed: devocionais públicos de todos os usuários ──────────────────────────
+export type FeedDevotional = Devotional & {
+  devotional_tags: { tag: string }[];
+  profiles: { full_name: string | null; username: string } | null;
+};
+
+export function useFeedDevotionals() {
+  return useQuery({
+    queryKey: ['feed-devotionals'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('devotionals')
+        .select('*, devotional_tags(tag), profiles(full_name, username)')
+        .eq('is_public', true)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      return data as FeedDevotional[];
+    },
+  });
+}
+
 // ── Excluir devocional ────────────────────────────────────────────────────────
 export function useDeleteDevotional() {
   const qc = useQueryClient();
