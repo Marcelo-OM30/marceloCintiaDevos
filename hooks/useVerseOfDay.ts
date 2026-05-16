@@ -7,7 +7,7 @@ interface VerseOfDay extends BibleVerse {
     chapter_number: number;
     bible_books: {
       name: string;
-      abbreviation: string;
+      abbrev: string;
     };
   };
 }
@@ -38,7 +38,7 @@ export function useVerseOfDay(versionSlug = 'arc') {
       const { data, error } = await supabase
         .from('bible_verses')
         .select(
-          'id, verse_number, text, bible_chapters!inner(chapter_number, bible_books!inner(name, abbreviation))',
+          'id, verse_number, text, bible_chapters!inner(chapter_number, bible_books!inner(name, abbrev))',
         )
         .eq('bible_chapters.bible_books.version_slug', versionSlug)
         .range(rowOffset, rowOffset)
@@ -49,7 +49,7 @@ export function useVerseOfDay(versionSlug = 'arc') {
         const { data: fallback } = await supabase
           .from('bible_verses')
           .select(
-            'id, verse_number, text, bible_chapters!inner(chapter_number, bible_books!inner(name, abbreviation))',
+            'id, verse_number, text, bible_chapters!inner(chapter_number, bible_books!inner(name, abbrev))',
           )
           .eq('verse_number', 1)
           .eq('bible_chapters.chapter_number', 23)
