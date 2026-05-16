@@ -18,7 +18,7 @@ import * as Sharing from 'expo-sharing';
 import { useVerseOfDay } from '@/hooks/useVerseOfDay';
 import { useCreateDevotional } from '@/hooks/useDevotionals';
 import { useCardStore } from '@/stores/cardStore';
-import { CardPreview } from '@/components/cards/CardPreview';
+import CardPreview from '@/components/cards/CardPreview';
 import { Button } from '@/components/ui/Button';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore } from '@/stores/authStore';
