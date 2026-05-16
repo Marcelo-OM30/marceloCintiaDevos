@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { BibleVerse } from '@/types';
+import { CURATED_VERSES } from '@/lib/curatedVerses';
 
 interface VerseOfDay extends BibleVerse {
   bible_chapters: {
@@ -8,43 +9,36 @@ interface VerseOfDay extends BibleVerse {
     bible_books: {
       name: string;
       abbrev: string;
-      bible_versions: {
-        slug: string;
-      };
     };
   };
 }
 
-// Deterministic "random" verse based on calendar day
-// so every user sees the same verse on the same day
-function getTodayVerseId(): number {
+// Seleciona o versículo do dia a partir da lista curada
+// — mesmo versículo para todos os usuários no mesmo dia
+function getTodayRef() {
   const now = new Date();
-  // Day of year 1-365
   const start = new Date(now.getFullYear(), 0, 0);
-  const diff = now.getTime() - start.getTime();
-  const dayOfYear = Math.floor(diff / 86_400_000);
-  // We'll fetch the verse at row offset = dayOfYear mod (total verses)
-  // We use a fixed seed offset so it cycles nicely. Actual total will be
-  // determined at runtime; we use 31_102 (ARC full Bible verse count).
-  return ((dayOfYear - 1 + 31102) % 31102) + 1; // 1-indexed row offset
+  const dayOfYear = Math.floor((now.getTime() - start.getTime()) / 86_400_000);
+  return CURATED_VERSES[(dayOfYear - 1 + CURATED_VERSES.length) % CURATED_VERSES.length];
 }
 
 export function useVerseOfDay(versionSlug = 'arc') {
-  const rowOffset = getTodayVerseId();
-  const today = new Date().toISOString().slice(0, 10); // 'YYYY-MM-DD'
+  const ref = getTodayRef();
+  const today = new Date().toISOString().slice(0, 10);
 
   return useQuery<VerseOfDay | null>({
     queryKey: ['verse-of-day', today, versionSlug],
     staleTime: 24 * 60 * 60 * 1000, // 24h
     queryFn: async () => {
-      // Get a single verse using row-level offset
       const { data, error } = await supabase
         .from('bible_verses')
         .select(
-          'id, number, text, bible_chapters!inner(number, bible_books!inner(name, abbrev, bible_versions!inner(slug)))',
+          'id, number, text, bible_chapters!inner(number, bible_books!inner(name, abbrev))',
         )
-        .eq('bible_chapters.bible_books.bible_versions.slug', versionSlug)
-        .range(rowOffset, rowOffset)
+        .eq('number', ref.verse)
+        .eq('bible_chapters.number', ref.chapter)
+        .eq('bible_chapters.bible_books.name', ref.book)
+        .limit(1)
         .single();
 
       if (error) {
@@ -52,7 +46,7 @@ export function useVerseOfDay(versionSlug = 'arc') {
         const { data: fallback } = await supabase
           .from('bible_verses')
           .select(
-            'id, number, text, bible_chapters!inner(number, bible_books!inner(name, abbrev, bible_versions!inner(slug)))',
+            'id, number, text, bible_chapters!inner(number, bible_books!inner(name, abbrev))',
           )
           .eq('number', 1)
           .eq('bible_chapters.number', 23)
