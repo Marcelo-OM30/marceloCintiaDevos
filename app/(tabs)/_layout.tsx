@@ -33,14 +33,14 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="creator"
+        name="creator/index"
         options={{
           title: 'Criar',
           tabBarIcon: ({ color, size }) => <Ionicons name="create" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="profile/index"
         options={{
           title: 'Perfil',
           tabBarIcon: ({ color, size }) => <Ionicons name="person" size={size} color={color} />,

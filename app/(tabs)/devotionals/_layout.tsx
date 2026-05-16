@@ -8,7 +8,7 @@ export default function DevotionalsLayout() {
         name="new"
         options={{ title: 'Novo Devocional', presentation: 'modal' }}
       />
-      <Stack.Screen name="[id]" options={{ title: 'Devocional' }} />
+      <Stack.Screen name="[id]/index" options={{ title: 'Devocional' }} />
       <Stack.Screen
         name="[id]/edit"
         options={{ title: 'Editar', presentation: 'modal' }}
