@@ -13,6 +13,10 @@ export default function DevotionalsLayout() {
         name="[id]/edit"
         options={{ title: 'Editar', presentation: 'modal' }}
       />
+      <Stack.Screen
+        name="versiculo-do-dia"
+        options={{ title: 'Versículo do Dia' }}
+      />
     </Stack>
   );
 }

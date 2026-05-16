@@ -141,8 +141,29 @@ export default function DevotionalsScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={['bottom']}>
+      {/* Banner Versículo do Dia */}
+      <TouchableOpacity
+        onPress={() => router.push('/(tabs)/devotionals/versiculo-do-dia')}
+        className="mx-4 mt-4 mb-3 rounded-2xl overflow-hidden"
+        style={{ backgroundColor: '#1a1a3e' }}
+        activeOpacity={0.85}
+      >
+        <View className="flex-row items-center px-4 py-3">
+          <Text className="text-2xl mr-3">✦</Text>
+          <View className="flex-1">
+            <Text className="text-purple-300 text-xs font-semibold uppercase tracking-widest">
+              Versículo do Dia
+            </Text>
+            <Text className="text-white text-sm font-semibold mt-0.5">
+              Devocional reformado + Story para compartilhar
+            </Text>
+          </View>
+          <Text className="text-purple-400 text-lg">›</Text>
+        </View>
+      </TouchableOpacity>
+
       {/* Seletor de aba */}
-      <View className="flex-row mx-4 mt-4 mb-2 bg-gray-200 rounded-xl p-1">
+      <View className="flex-row mx-4 mb-2 bg-gray-200 rounded-xl p-1">
         <TouchableOpacity
           onPress={() => setTab('mine')}
           className={`flex-1 py-2 rounded-lg items-center ${tab === 'mine' ? 'bg-white shadow-sm' : ''}`}
