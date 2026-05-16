@@ -4,10 +4,13 @@ import { BibleVerse } from '@/types';
 
 interface VerseOfDay extends BibleVerse {
   bible_chapters: {
-    chapter_number: number;
+    number: number;
     bible_books: {
       name: string;
       abbrev: string;
+      bible_versions: {
+        slug: string;
+      };
     };
   };
 }
@@ -38,21 +41,21 @@ export function useVerseOfDay(versionSlug = 'arc') {
       const { data, error } = await supabase
         .from('bible_verses')
         .select(
-          'id, number, text, bible_chapters!inner(chapter_number, bible_books!inner(name, abbrev))',
+          'id, number, text, bible_chapters!inner(number, bible_books!inner(name, abbrev, bible_versions!inner(slug)))',
         )
-        .eq('bible_chapters.bible_books.version_slug', versionSlug)
+        .eq('bible_chapters.bible_books.bible_versions.slug', versionSlug)
         .range(rowOffset, rowOffset)
         .single();
 
       if (error) {
-        // Fallback: just fetch any well-known verse (Salmos 23:1)
+        // Fallback: Salmos 23:1
         const { data: fallback } = await supabase
           .from('bible_verses')
           .select(
-            'id, number, text, bible_chapters!inner(chapter_number, bible_books!inner(name, abbrev))',
+            'id, number, text, bible_chapters!inner(number, bible_books!inner(name, abbrev, bible_versions!inner(slug)))',
           )
           .eq('number', 1)
-          .eq('bible_chapters.chapter_number', 23)
+          .eq('bible_chapters.number', 23)
           .eq('bible_chapters.bible_books.name', 'Salmos')
           .limit(1)
           .single();

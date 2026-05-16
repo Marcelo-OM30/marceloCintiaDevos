@@ -120,7 +120,7 @@ export default function VersiculoDoDiaScreen() {
 
   // ── Formata a referência bíblica ──
   const referencia = verse
-    ? `${verse.bible_chapters.bible_books.name} ${verse.bible_chapters.chapter_number}:${verse.verse_number}`
+    ? `${verse.bible_chapters.bible_books.name} ${verse.bible_chapters.number}:${verse.number}`
     : '';
 
   // ── Gerar devocional e story ──────────────────────────────────────────────
